@@ -1,12 +1,37 @@
-## Micronaut 2.5.0 Documentation
+# Kitchen Service
 
-- [User Guide](https://docs.micronaut.io/2.5.0/guide/index.html)
-- [API Reference](https://docs.micronaut.io/2.5.0/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/2.5.0/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
----
+Produces a food and drinks menu for present time.
 
-## Feature http-client documentation
+## Running locally
+```cmd
+./gradlew runFunction
+```
+> ALTERNATIVE 
+> 
+> java -jar java-function-invoker-1.0.2.jar \
+>     --classpath build/libs/kitchen-service-0.1-all.jar \
+>     --target io.micronaut.gcp.function.http.HttpFunction \
+>     --port 8080
 
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
+### Verify locally
+```bash
+curl  \
+    localhost:8080/KitchenService
+```
 
+## Deployment
+
+```bash
+./gradlew clean shadowJar
+(cd build/libs
+gcloud beta functions deploy kitchen_service \
+    --allow-unauthenticated \
+    --entry-point io.micronaut.gcp.function.http.HttpFunction \
+    --runtime java11 --trigger-http)
+```
+
+### Test invocation
+```bash
+HTTP_TRIGGER_URL=$(gcloud beta functions describe kitchen_service \
+    --format='value(httpsTrigger.url)')
+curl ${HTTP_TRIGGER_URL}/kitchenservice/menu 

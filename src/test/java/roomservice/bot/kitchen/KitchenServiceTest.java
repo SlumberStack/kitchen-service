@@ -1,4 +1,4 @@
-package kitchen.service;
+package roomservice.bot.kitchen;
 
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
